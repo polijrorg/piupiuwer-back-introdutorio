@@ -8,8 +8,6 @@ interface Request {
         birth_date: Date;
         cpf: string;
         phone: string;
-        created_at: Date;
-        updated_at: Date;
     };
 }
 
@@ -26,7 +24,9 @@ class UpdateUserService {
         if (userIndex < 0)
             throw Error('Nenhum usuário com esse id foi encontrado.');
 
-        if (this.usersRepository.findIndexByCpf(data.cpf) >= 0)
+        const userWithCpfIndex = this.usersRepository.findIndexByCpf(data.cpf)
+
+        if (userWithCpfIndex >=0 && userWithCpfIndex !== userIndex)
             throw Error('Um usuário com esse CPF já foi cadastrado.');
 
         const user = this.usersRepository.update({

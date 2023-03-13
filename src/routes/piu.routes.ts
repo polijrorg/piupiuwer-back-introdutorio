@@ -19,6 +19,15 @@ const validateData = (request: any, response: any, next: any) => {
     return next();
 };
 
+const validateText = (request: any, response: any, next: any) => {
+    const { text } = request.body;
+
+    if (!text)
+        return response.status(400).json({ error: 'Parâmetros inválidos.' });
+
+    return next();
+}
+
 const validateId = (
     request: Request,
     response: Response,
@@ -54,31 +63,31 @@ piusRouter.get('/:id', validateId, (request, response) => {
 
 piusRouter.post('/', validateData, (request, response) => {
     try {
-        const data = request.body;
+        const { user_id, text } = request.body;
 
-        const createUser = new CreatePiuService({
+        const createPiu = new CreatePiuService({
             piusRepository,
             usersRepository,
         });
 
-        const user = createUser.execute(data);
+        const piu = createPiu.execute({ user_id, text });
 
-        return response.json(user);
+        return response.json(piu);
     } catch (e: any) {
         return response.status(400).json({ error: e.message });
     }
 });
 
-piusRouter.put('/:id', validateId, validateData, (request, response) => {
+piusRouter.put('/:id', validateId, validateText, (request, response) => {
     try {
-        const data = request.body;
+        const { text } = request.body;
         const { id } = request.params;
 
         const updateUser = new UpdatePiuService(piusRepository);
 
         const user = updateUser.execute({
             id,
-            data,
+            data: { text },
         });
 
         return response.json(user);

@@ -55,13 +55,15 @@ usersRouter.get('/:id', validateId, (request, response) => {
 
 usersRouter.post('/', validateData, (request, response) => {
     try {
-        const data = request.body;
+        const { name, birth_date, cpf, phone } = request.body;
 
         const createUser = new CreateUserService(usersRepository);
 
         const user = createUser.execute({
-            ...data,
-            birth_date: parseISO(data.birth_date),
+            name, 
+            birth_date: parseISO(birth_date),
+            cpf, 
+            phone
         });
 
         return response.json(user);
@@ -72,7 +74,7 @@ usersRouter.post('/', validateData, (request, response) => {
 
 usersRouter.put('/:id', validateId, validateData, (request, response) => {
     try {
-        const data = request.body;
+        const { name, birth_date, cpf, phone } = request.body;
         const { id } = request.params;
 
         const updateUser = new UpdateUserService(usersRepository);
@@ -80,8 +82,10 @@ usersRouter.put('/:id', validateId, validateData, (request, response) => {
         const user = updateUser.execute({
             id,
             data: {
-                ...data,
-                birth_date: parseISO(data.birth_date),
+                name, 
+                birth_date: parseISO(birth_date),
+                cpf, 
+                phone
             },
         });
 

@@ -6,8 +6,6 @@ interface Request {
     birth_date: Date;
     cpf: string;
     phone: string;
-    created_at: Date;
-    updated_at: Date;
 }
 
 class CreateUserService {
@@ -22,7 +20,7 @@ class CreateUserService {
             throw Error('Um usuário com esse CPF já foi cadastrado.');
 
         const user = this.usersRepository.create(data);
-        
+
         return user;
     }
 }
